@@ -1,0 +1,3 @@
+pandas - загрузка и обработка таблиц
+scikit-learn - TF-IFD, cosine similarity
+nltk - stopwords
