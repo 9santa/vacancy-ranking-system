@@ -31,6 +31,64 @@ class TfidfJobMatcher:
         # Calculates the importance of words based on a corpus of vacancies
         self.job_vectors = self.vectorizer.fit_transform(cleaned_jobs_texts)
 
+    def _extract_resume_tokens(self, resume_text: str) -> set[str]:
+        """
+        Simple resume tokenization:
+        clean text and transform into set of words.
+        """
+        cleaned_resume = clean_text(resume_text)
+        return set(cleaned_resume.split())
+
+    def _extract_job_skills(self, skills_text: str) -> set[str]:
+        """
+        Transform 'python;sql;excel;tableau'
+        into set of tokens.
+        """
+        if not isinstance(skills_text, str):
+            return set()
+
+        skills = [skill.strip().lower() for skill in skills_text.split(";")]
+        return set(skills)
+
+    # NOTE: This is not 'Named-entity recognition', and not 'real' skill extractor
+    def _get_matched_skills(self, resume_text: str, skills_text: str) -> list[str]:
+        # Find intersection between resume tokens and vacancy's skills
+        resume_tokens = self._extract_resume_tokens(resume_text)
+        job_skills = self._extract_job_skills(skills_text)
+
+        matched = sorted(job_skills.intersection(resume_tokens))
+        return matched
+
+    def _get_top_overlap_terms(self, resume_vector, job_index: int, top_n: int = 5) -> list[str]:
+        """
+        Find features TF-IDF, which matched the most between resume and some vacancy
+        Idea:
+        - resume has TF-IDF weights on words
+        - vacancy has TF-IDF weights on the same words
+        - multiply them per element
+        - take top-N features with the highest contribution
+        """
+        job_vector = self.job_vectors[job_index]
+
+        # Per element weight multiply
+        overlap = resume_vector.multiply(job_vector)
+
+        feature_names = self.vectorizer.get_feature_names_out()
+        overlap_array = overlap.toarray().flatten()
+
+        # Indices with non-zero contribution
+        nonzero_indices = overlap_array.nonzero()[0]
+
+        if len(nonzero_indices) == 0:
+            return []
+
+        # Sort by descending contribution
+        sorted_indices = sorted(nonzero_indices, key=lambda idx: overlap_array[idx], reverse=True)
+
+        top_indices = sorted_indices[:top_n]
+        return [feature_names[idx] for idx in top_indices]
+
+
     # Returns top-k most relevant vacancies for this resume
     # 1) Clean text
     # 2) Vectorize into the same TF-IDF space
@@ -43,10 +101,38 @@ class TfidfJobMatcher:
         cleaned_resume = clean_text(resume_text)
         resume_vector = self.vectorizer.transform([cleaned_resume])
 
-        similarities = cosine_similarity(resume_vector, self.job_vectors).flatten()
+        similarities = cosine_similarity(resume_vector, self.job_vectors).flatten() # flatten() converts multi-dim array into 1D
 
         results = self.jobs_df.copy()
         results["score"] = similarities
+
+        # For each vacancy calc explainability fields
+        matched_skills_list = []
+        overlap_terms_list = []
+
+        for idx, row in results.iterrows():
+            matched_skills = self._get_matched_skills(resume_text, row["skills"])
+            overlap_terms = self._get_top_overlap_terms(resume_vector, idx, top_n=5)
+
+            matched_skills_list.append(", ".join(matched_skills))
+            overlap_terms_list.append(", ".join(overlap_terms))
+
+        results["matched_skills"] = matched_skills_list
+        results["overlap_terms"] = overlap_terms_list
+
         results = results.sort_values("score", ascending=False).head(top_k)
 
-        return results[["job_id", "title", "company", "location", "score", "description", "skills"]]
+        return results[
+            [
+                "job_id",
+                "title",
+                "company",
+                "location",
+                "score",
+                "matched_skills",
+                "overlap_terms",
+                "description",
+                "skills",
+            ]
+        ]
+
