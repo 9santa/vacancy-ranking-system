@@ -1,3 +1,7 @@
+# TF-IDF doesn't understand 'meaning' of the words, it only catches text matches
+# 'ml' and 'machine learning' might match badly, even though they mean the same thing
+# It's lexical matching, not semantic matching
+
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
