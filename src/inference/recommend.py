@@ -17,7 +17,17 @@ def main():
     recommendations = matcher.recommend(sample_resume, top_k=5)
 
     print("\nTop recommendations:\n")
-    print(recommendations.to_string(index=False))
+    print(
+        recommendations[
+            [
+                "job_id",
+                "title",
+                "score",
+                "matched_skills",
+                "overlap_terms"
+            ]
+        ].to_string(index=False)
+    )
 
 if __name__ == "__main__":
     main()
