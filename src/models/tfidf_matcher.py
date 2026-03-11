@@ -164,8 +164,7 @@ class TfidfJobMatcher:
 
         results = results.sort_values("score", ascending=False).head(top_k)
 
-        return results[
-            [
+        return_cols = [
                 "job_id",
                 "title",
                 "company",
@@ -175,6 +174,11 @@ class TfidfJobMatcher:
                 "overlap_terms",
                 "description",
                 "skills",
-            ]
         ]
+
+        if "role_family" in results.columns:
+            return_cols.append("role_family")
+
+        return results[return_cols]
+
 
