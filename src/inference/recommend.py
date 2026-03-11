@@ -26,7 +26,7 @@ def main():
                 "matched_skills",
                 "overlap_terms"
             ]
-        ].to_string(index=False)
+        ].to_string(index=False, col_space=5, justify="center")
     )
 
 if __name__ == "__main__":
