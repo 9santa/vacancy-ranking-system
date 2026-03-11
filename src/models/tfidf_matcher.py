@@ -83,10 +83,52 @@ class TfidfJobMatcher:
             return []
 
         # Sort by descending contribution
-        sorted_indices = sorted(nonzero_indices, key=lambda idx: overlap_array[idx], reverse=True)
+        sorted_indices = sorted(nonzero_indices, key=lambda idx: (overlap_array[idx], len(feature_names[idx].split())), reverse=True)
 
-        top_indices = sorted_indices[:top_n]
-        return [feature_names[idx] for idx in top_indices]
+        generic_terms = {
+            "data",
+            "science",
+            "project",
+            "projects",
+            "work",
+            "worked",
+            "experience",
+            "student",
+            "analysis",
+        }
+
+        selected_terms = []
+        selected_word_sets = []
+
+        for idx in sorted_indices:
+            term = feature_names[idx].strip()
+            words = term.split()
+
+            # skip too generic one-word terms
+            if term in generic_terms:
+                continue
+
+            word_set = set(words)
+
+            # if already selected longer term with the same words,
+            # skip the short one
+            is_redundant = False
+            for existing_set in selected_word_sets:
+                if word_set.issubset(existing_set):
+                    is_redundant = True
+                    break
+
+            if is_redundant:
+                continue
+
+            selected_terms.append(term)
+            selected_word_sets.append(word_set)
+
+            if len(selected_terms) == top_n:
+                break
+
+        return selected_terms
+
 
 
     # Returns top-k most relevant vacancies for this resume
