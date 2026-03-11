@@ -1,0 +1,7 @@
+query_id,resume_text,target_role_family
+1,"Computer science student with Python, pandas, machine learning, statistics, and model evaluation experience.",data_science
+2,"Student with SQL, Excel, dashboard development, KPI tracking, and reporting experience.",analytics
+3,"Internship project experience in Power BI, reporting automation, stakeholder dashboards, and Excel.",bi
+4,"Worked on A/B testing, product metrics, SQL analysis, retention dashboards, and analytics.",analytics
+5,"Experience with scikit-learn, feature engineering, experiments, and predictive modeling using Python.",data_science
+6,"Prepared recurring business reports, maintained dashboards, validated metrics, and used Power BI.",bi
