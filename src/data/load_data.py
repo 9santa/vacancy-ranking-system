@@ -24,8 +24,8 @@ def build_job_text(df: pd.DataFrame) -> pd.DataFrame:
         df[col] = df[col].fillna("").astype(str)
 
     df["job_text"] = (
-        df["title"] + " "
-        + df["skills"] + " "
+        (df["title"] + " ") * 3
+        + (df["skills"] + " ") * 2
         + df["description"]
     )
 
