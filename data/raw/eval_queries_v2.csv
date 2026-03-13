@@ -1,0 +1,19 @@
+query_id,resume_text,target_role_family,difficulty
+1,"Computer science student with Python, pandas, scikit-learn, machine learning, regression, classification, and model evaluation experience.",data_science,easy
+2,"Student with SQL, Excel, dashboard development, KPI tracking, stakeholder reporting, and weekly business reports.",bi,easy
+3,"Worked on A/B testing, retention analysis, user segmentation, funnel analysis, and product metrics using SQL and Python.",analytics,easy
+4,"Experience with forecasting, NLP, feature engineering, and predictive modeling using Python and pandas.",data_science,easy
+5,"Built Power BI dashboards, automated recurring reports, validated KPI definitions, and supported business intelligence reporting.",bi,easy
+6,"Analyzed campaign performance, marketing data, user behavior, and experiment results using SQL, Tableau, and Python.",analytics,easy
+7,"Worked with SQL, Excel, dashboards, KPI tracking, and Power BI, but also collaborated with product teams on ad hoc analysis.",bi,medium
+8,"Student with Python, SQL, pandas, dashboard creation, and experimentation projects involving product metrics and retention.",analytics,medium
+9,"Built dashboards for finance and operations teams, maintained reporting pipelines, and also performed descriptive business analysis.",bi,medium
+10,"Experience in machine learning projects, exploratory data analysis, A/B testing, and stakeholder presentations.",data_science,medium
+11,"Worked on product analytics, dashboard development, KPI reporting, and segmentation for growth and retention teams.",analytics,medium
+12,"Created recurring executive dashboards, monitored KPI quality, and maintained Power BI reporting workflows.",bi,medium
+13,"Used Python, pandas, SQL, and statistics to analyze experiments, build simple predictive models, and communicate insights.",data_science,hard
+14,"Performed ad hoc analysis, built dashboards, tracked KPIs, and owned recurring reporting for business stakeholders.",analytics,hard
+15,"Built SQL dashboards and reporting views, but most work focused on Power BI maintenance, recurring reporting, and business intelligence support.",bi,hard
+16,"Worked with machine learning, feature engineering, and forecasting, but also created dashboards and presented business recommendations.",data_science,hard
+17,"Analyzed retention, funnel performance, A/B tests, and user behavior while also owning weekly KPI dashboards.",analytics,hard
+18,"Maintained reporting pipelines, validated source data, built dashboards, and supported decision-making with recurring executive reports.",bi,hard
