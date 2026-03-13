@@ -14,6 +14,9 @@ def load_eval_queries(csv_path: str) -> pd.DataFrame:
     if missing_columns:
         raise ValueError(f"Missing required columns in eval file: {missing_columns}")
 
+    if "difficulty" not in df.columns:
+        df["difficulty"] = "unknown"
+
     return df
 
 # Returns 1, if within top-k there is atleast one vacancy with correct class. Else 0.
@@ -32,12 +35,14 @@ def evaluate_matcher(
         query_id = row["query_id"]
         resume_text = row["resume_text"]
         target_role_family = row["target_role_family"]
+        difficulty = row["difficulty"]
 
         recommendations = matcher.recommend(resume_text, top_k=max(top_k_values))
         predicted_roles = recommendations["role_family"].tolist()
 
         result_row = {
             "query_id": query_id,
+            "difficulty": difficulty,
             "target_role_family": target_role_family,
             "top_1_role": predicted_roles[0]
         }
@@ -53,11 +58,15 @@ def evaluate_matcher(
     for k in top_k_values:
         metrics[f"hit@{k}"] = results_df[f"hit@{k}"].mean()
 
-    return (results_df, metrics)
+    difficulty_metrics = (
+        results_df.groupby("difficulty")[[f"hit@{k}" for k in top_k_values]].mean().reset_index()
+    )
+
+    return results_df, {"overall": metrics, "by_difficulty": difficulty_metrics}
 
 def main():
     jobs_df = load_jobs("data/raw/jobs.csv")
-    eval_df = load_eval_queries("data/raw/eval_queries.csv")
+    eval_df = load_eval_queries("data/raw/eval_queries_v2.csv")
 
     matcher = EmbeddingJobMatcher(
         model_name="all-MiniLM-L6-v2",
@@ -71,8 +80,11 @@ def main():
     print(results_df.to_string(index=False))
 
     print("\nAggregate metrics:\n")
-    for metric_name, value in metrics.items():
+    for metric_name, value in metrics["overall"].items():
         print(f"{metric_name}: {value:.3f}")
+
+    print("\nMetrics by difficulty:\n")
+    print(metrics["by_difficulty"].to_string(index=False))
 
 
 if __name__ == "__main__":
