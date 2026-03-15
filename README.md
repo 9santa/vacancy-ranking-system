@@ -80,3 +80,65 @@ top-10 jobs
 cross-encoder reranker
   ↓
 final ranking
+
+
+## Combine cross-encoder with feature reranker -> hybrid neural reranker
+
+resume
+  ↓
+Embedding Retriever
+  ↓
+Top-10 candidates
+  ↓
+Feature Scorer + Cross-Encoder Scorer
+  ↓
+Hybrid Neural Reranker
+  ↓
+Final ranking
+
+
+# Final model comparison on the extended validation set
+
+| Model | Hit@1 | Hit@3 | Hit@5 |
+|------|------:|------:|------:|
+| TF-IDF Baseline | 0.833 | 1.000 | 1.000 |
+| Structured TF-IDF | 0.833 | 1.000 | 1.000 |
+| Hybrid TF-IDF | 0.833 | 1.000 | 1.000 |
+| Embedding Retriever | 0.722 | 0.944 | 0.944 |
+| Two-stage + Feature Reranker | 0.833 | 0.944 | 1.000 |
+| Two-stage + Cross-Encoder Reranker | 0.833 | 0.889 | 1.000 |
+| **Two-stage + Hybrid Neural Reranker** | **0.833** | **1.000** | **1.000** |
+
+## Current best architecture
+
+The best-performing current setup is a **two-stage hybrid neural ranking pipeline**:
+
+1. **Embedding-based retrieval** (`all-MiniLM-L6-v2`
+2. **Hybrid neural reranking**, combining:
+   - retrieval score
+   - cross-encoder score
+   - feature-based bonuses scores
+
+This model preserves the semantic strength of neural reranking while retaining domain-specific signals useful for distinguishing closely related role families.
+
+## Key finding
+
+The experiments showed that neither a pure feature-based reranker nor a pure neural reranker was sufficient on its own.
+
+The best results were achieved by **combining**:
+- semantic retrieval,
+- neural pairwise reranking,
+- structured domain features.
+
+## Remaining failure mode
+
+The main remaining error pattern is confusion between:
+
+- `bi`
+- `analytics`
+
+especially when resumes contain overlapping terms such as:
+- dashboards
+- KPI tracking
+- reporting
+- business analytics
