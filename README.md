@@ -26,7 +26,6 @@ Metrics:
 | v4 | `embeddings_v4` | Semantic retrieval with `sentence-transformers/all-MiniLM-L6-v2` | 1.000 | 1.000 | 1.000 |
 
 
-
 ### Results on the extended evaluation set
 
 | Model | Hit@1 | Hit@3 | Hit@5 |
@@ -68,6 +67,7 @@ The two-stage setup improved final ranking quality over the pure embedding retri
 - **Hit@1 improved from 0.722 to 0.833**
 - **Hit@5 improved from 0.944 to 1.000**
 - **Hit@3 remained unchanged at 0.944**
+
 
 ## Cross-encoder reranker comes to play
 
@@ -142,3 +142,59 @@ especially when resumes contain overlapping terms such as:
 - KPI tracking
 - reporting
 - business analytics
+
+
+## Learned reranker experiment
+
+A trainable pointwise reranker was trained on top of the two-stage retrieval pipeline.
+
+### Training setup
+
+The learned reranker uses the following features for each `(resume, job)` pair:
+
+- normalized embedding retrieval score
+- normalized cross-encoder score
+- skill overlap bonus
+- domain phrase bonus
+- title alignment bonus
+
+A simple **Logistic Regression** model was trained as a pointwise reranker.
+
+### Training data
+
+The reranker was trained on synthetic query-job pairs generated from the training split:
+
+- pair rows: **180**
+- positive labels: **100**
+- negative labels: **80**
+
+### Validation results
+
+| Metric | Value |
+|------|------:|
+| Hit@1 | 0.889 |
+| Hit@3 | 1.000 |
+| Hit@5 | 1.000 |
+
+### Test results
+
+| Metric | Value |
+|------|------:|
+| Hit@1 | 0.944 |
+| Hit@3 | 0.944 |
+| Hit@5 | 1.000 |
+
+### Interpretation
+
+The learned reranker achieved the best **top-1 ranking quality** among all tested models on the current test set.
+
+It outperformed manually weighted rerankers in Hit@1, which suggests that learning how to combine retrieval, neural, and domain-specific signals is more effective than setting these weights by hand.
+
+### Remaining failure mode
+
+The main remaining error is still confusion between:
+
+- `analytics`
+- `bi`
+
+This indicates that the main challenge of the task is ranking closely related analytical roles rather than retrieving obviously relevant jobs.
