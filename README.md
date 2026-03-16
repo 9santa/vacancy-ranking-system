@@ -208,3 +208,34 @@ Without hard-negative pairing, distribution was 95%+ positive. Which made the mo
 with this change, the model is trained on balanced pairs with hard-negatives. Hard-negatives were chosen instead of random-negatives,
 because random-negatives are too easy.
 
+### Learned reranker (linear regression) interpretation
+
+Inspection of the logistic regression coefficients showed that the strongest signals for relevance were:
+
+- skill overlap
+- normalized retrieval score
+- title alignment
+- normalized cross-encoder score
+
+This suggests that the learned reranker relies most on a combination of:
+- structured skill matching,
+- strong retrieval candidates,
+- role-family alignment,
+- and semantic pairwise relevance.
+
+Interestingly, the domain phrase bonus received a slightly negative coefficient, which suggests that it may be partially redundant with other features or too noisy in the current dataset.
+
+### Ablation study
+
+An ablation experiment was run to test whether `domain_phrase_bonus` improves the learned reranker.
+
+Result:
+- removing `domain_phrase_bonus` did **not** change validation or test metrics
+- the same single test error remained
+- therefore, the final learned reranker excludes this feature
+
+This suggests that `domain_phrase_bonus` was redundant relative to stronger signals such as:
+- skill overlap
+- retrieval score
+- title alignment
+- cross-encoder score

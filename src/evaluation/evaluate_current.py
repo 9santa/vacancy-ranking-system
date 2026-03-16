@@ -4,6 +4,11 @@ from src.data.load_data import load_jobs
 from src.models.two_stage_learned_matcher import TwoStageLearnedMatcher
 
 
+JOBS_PATH = "data/raw/jobs_v2.csv"
+TEST_QUERIES_PATH = "data/raw/test_queries_v3.csv"
+MODEL_ARTIFACT_PATH = "artifacts/learned_reranker_no_domain.joblib"
+
+
 def load_queries(csv_path: str) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
 
@@ -25,7 +30,7 @@ def hit_at_k(recommended_role_families: list[str], target_role_family: str, k: i
 def evaluate_matcher(
     matcher: TwoStageLearnedMatcher,
     eval_df: pd.DataFrame,
-    retrieve_top_k: int = 10,
+    retrieve_top_k: int = 30,
     top_k_values: list[int] = [1, 3, 5],
 ) -> tuple[pd.DataFrame, dict]:
     rows = []
@@ -62,8 +67,8 @@ def evaluate_matcher(
 
 
 def main():
-    jobs_df = load_jobs("data/raw/jobs_v2.csv")
-    test_df = load_queries("data/raw/test_queries_v3.csv")
+    jobs_df = load_jobs(JOBS_PATH)
+    test_df = load_queries(TEST_QUERIES_PATH)
 
     matcher = TwoStageLearnedMatcher(
         embedding_model_name="all-MiniLM-L6-v2",
@@ -73,16 +78,16 @@ def main():
         cross_encoder_max_length=512,
     )
     matcher.fit_jobs(jobs_df)
-    matcher.reranker.load("artifacts/learned_reranker.joblib")
+    matcher.reranker.load(MODEL_ARTIFACT_PATH)
 
     results_df, metrics = evaluate_matcher(
         matcher,
         test_df,
-        retrieve_top_k=10,
+        retrieve_top_k=30,
         top_k_values=[1, 3, 5],
     )
 
-    print("\nTest results:\n")
+    print("\nCurrent model test results:\n")
     print(results_df.to_string(index=False))
 
     print("\nOverall metrics:\n")

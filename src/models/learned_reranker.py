@@ -23,7 +23,7 @@ class LearnedReranker:
         "retrieval_score_norm",
         "cross_encoder_score_norm",
         "skill_overlap_bonus",
-        "domain_phrase_bonus",
+        # "domain_phrase_bonus",
         "title_alignment_bonus",
     ]
 

@@ -2,8 +2,12 @@ from src.data.load_data import load_jobs
 from src.models.two_stage_learned_matcher import TwoStageLearnedMatcher
 
 
+JOBS_PATH = "data/raw/jobs_v2.csv"
+MODEL_ARTIFACT_PATH = "artifacts/learned_reranker_no_domain.joblib"
+
+
 def main():
-    jobs_df = load_jobs("data/raw/jobs_v2.csv")
+    jobs_df = load_jobs(JOBS_PATH)
 
     matcher = TwoStageLearnedMatcher(
         embedding_model_name="all-MiniLM-L6-v2",
@@ -13,21 +17,21 @@ def main():
         cross_encoder_max_length=512,
     )
     matcher.fit_jobs(jobs_df)
-    matcher.reranker.load("artifacts/learned_reranker.joblib")
+    matcher.reranker.load(MODEL_ARTIFACT_PATH)
 
     sample_resume = """
-    Data Science student with experience in Python, SQL, pandas, data visualization,
-    machine learning basics, A/B testing, and dashboard development.
-    Worked on internship-style projects involving data cleaning, analytics, and statistics.
+    Worked on SQL analysis, A/B testing, retention, segmentation, and dashboard-based
+    reporting for product teams. Built recommendations for stakeholders and supported
+    experiment analysis with Python and business metrics.
     """
 
     recommendations = matcher.recommend(
         sample_resume,
-        retrieve_top_k=10,
+        retrieve_top_k=30,
         final_top_k=5,
     )
 
-    print("\nTop recommendations:\n")
+    print("\nCurrent model recommendations:\n")
     print(
         recommendations[
             [
@@ -37,10 +41,8 @@ def main():
                 "retrieval_score",
                 "cross_encoder_score",
                 "skill_overlap_bonus",
-                "domain_phrase_bonus",
                 "title_alignment_bonus",
                 "matched_skills",
-                "matched_domain_terms",
                 "role_family",
             ]
         ].to_string(index=False)

@@ -146,7 +146,7 @@ def main():
     for metric_name, value in metrics.items():
         print(f"{metric_name}: {value:.3f}")
 
-    artifact_path = Path("artifacts/learned_reranker.joblib")
+    artifact_path = Path("artifacts/learned_reranker_no_domain.joblib")
     matcher.reranker.save(artifact_path)
     print(f"\nSaved trained reranker to: {artifact_path}")
 
