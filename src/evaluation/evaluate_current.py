@@ -62,8 +62,8 @@ def evaluate_matcher(
 
 
 def main():
-    jobs_df = load_jobs("data/raw/jobs.csv")
-    test_df = load_queries("data/raw/eval_queries_v2.csv")
+    jobs_df = load_jobs("data/raw/jobs_v2.csv")
+    test_df = load_queries("data/raw/test_queries_v3.csv")
 
     matcher = TwoStageLearnedMatcher(
         embedding_model_name="all-MiniLM-L6-v2",

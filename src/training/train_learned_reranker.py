@@ -18,8 +18,21 @@ def load_queries(csv_path: str) -> pd.DataFrame:
 def build_pair_dataset(
     matcher: TwoStageLearnedMatcher,
     queries_df: pd.DataFrame,
-    retrieve_top_k: int = 10,
+    retrieve_top_k: int = 30,
+    max_positives_per_query: int = 2,
+    max_negatives_per_query: int = 6,
 ) -> pd.DataFrame:
+    """
+    Builds a more balanced pair dataset for learned reranking.
+
+    Strategy:
+    - retrieve a wider shortlist
+    - keep only a few top positives
+    - keep several top hard negatives
+
+    This makes the reranker learn to distinguish
+    correct jobs from close-but-wrong alternatives.
+    """
     rows = []
 
     for _, row in queries_df.iterrows():
@@ -27,17 +40,39 @@ def build_pair_dataset(
         resume_text = row["resume_text"]
         target_role_family = row["target_role_family"]
 
+        # Wider retrieval pool for mining hard negatives
         candidates = matcher.retriever.recommend(resume_text, top_k=retrieve_top_k)
-        feature_df = matcher.reranker.build_feature_frame(resume_text, candidates)
+
+        positives = (
+            candidates[candidates["role_family"] == target_role_family]
+            .sort_values("score", ascending=False)
+            .head(max_positives_per_query)
+        )
+
+        hard_negatives = (
+            candidates[candidates["role_family"] != target_role_family]
+            .sort_values("score", ascending=False)
+            .head(max_negatives_per_query)
+        )
+
+        selected_candidates = pd.concat([positives, hard_negatives], ignore_index=True)
+
+        # If for some reason nothing selected, skip query
+        if selected_candidates.empty:
+            continue
+
+        feature_df = matcher.reranker.build_feature_frame(resume_text, selected_candidates)
 
         feature_df["query_id"] = query_id
         feature_df["target_role_family"] = target_role_family
-        feature_df["label"] = (feature_df["role_family"] == target_role_family).astype(int)
+        feature_df["label"] = (
+            feature_df["role_family"] == target_role_family
+        ).astype(int)
 
         rows.append(feature_df)
 
-    pair_df = pd.concat(rows, ignore_index=True)
-    return pair_df
+    # pair_df = pd.concat(rows, ignore_index=True)
+    return pd.concat(rows, ignore_index=True)
 
 
 def hit_at_k(recommended_role_families: list[str], target_role_family: str, k: int) -> int:
@@ -78,9 +113,9 @@ def evaluate_matcher(
 
 
 def main():
-    jobs_df = load_jobs("data/raw/jobs.csv")
-    train_df = load_queries("data/raw/train_queries_v1.csv")
-    val_df = load_queries("data/raw/val_queries_v1.csv")
+    jobs_df = load_jobs("data/raw/jobs_v2.csv")
+    train_df = load_queries("data/raw/train_queries_v2.csv")
+    val_df = load_queries("data/raw/val_queries_v2.csv")
 
     matcher = TwoStageLearnedMatcher(
         embedding_model_name="all-MiniLM-L6-v2",
@@ -91,12 +126,14 @@ def main():
     )
     matcher.fit_jobs(jobs_df)
 
-    train_pair_df = build_pair_dataset(matcher, train_df, retrieve_top_k=10)
+    train_pair_df = build_pair_dataset(matcher, train_df, retrieve_top_k=30, max_positives_per_query=2, max_negatives_per_query=6)
 
     print("\nTraining pair dataset info:")
     print(f"Rows: {len(train_pair_df)}")
     print(f"Positive labels: {train_pair_df['label'].sum()}")
     print(f"Negative labels: {(train_pair_df['label'] == 0).sum()}")
+    print("\nLabel distribution:")
+    print(train_pair_df["label"].value_counts(normalize=True).to_string())
 
     matcher.fit_reranker(train_pair_df)
 

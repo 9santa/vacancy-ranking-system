@@ -3,7 +3,7 @@ from src.models.two_stage_learned_matcher import TwoStageLearnedMatcher
 
 
 def main():
-    jobs_df = load_jobs("data/raw/jobs.csv")
+    jobs_df = load_jobs("data/raw/jobs_v2.csv")
 
     matcher = TwoStageLearnedMatcher(
         embedding_model_name="all-MiniLM-L6-v2",

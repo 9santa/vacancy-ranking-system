@@ -198,3 +198,13 @@ The main remaining error is still confusion between:
 - `bi`
 
 This indicates that the main challenge of the task is ranking closely related analytical roles rather than retrieving obviously relevant jobs.
+
+
+## Current-best pipeline:
+
+Embedding retriever + learned reranker trained on hard-negative pairs
+
+Without hard-negative pairing, distribution was 95%+ positive. Which made the model train on "almost all pairs are positive",
+with this change, the model is trained on balanced pairs with hard-negatives. Hard-negatives were chosen instead of random-negatives,
+because random-negatives are too easy.
+
