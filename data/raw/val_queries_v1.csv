@@ -1,0 +1,10 @@
+query_id,resume_text,target_role_family,difficulty
+1,"Applied machine learning, feature engineering, and statistics to build predictive models in Python.",data_science,easy
+2,"Worked on forecasting and classification problems, but also created dashboards for communicating model results.",data_science,hard
+3,"Used Python, pandas, model evaluation, and experiment analysis for data science projects.",data_science,medium
+4,"Analyzed user funnels, retention, and A/B tests using SQL, dashboards, and product metrics.",analytics,easy
+5,Built KPI dashboards and ran ad hoc analysis for product and growth stakeholders.,analytics,medium
+6,"Worked on segmentation, experimentation, dashboards, and recurring stakeholder insights for business teams.",analytics,hard
+7,"Created Power BI dashboards, monitored KPI quality, and supported recurring business reporting.",bi,easy
+8,"Maintained reporting pipelines, executive dashboards, and recurring KPI reporting for leadership teams.",bi,medium
+9,"Worked on SQL reporting views, dashboard refreshes, and business intelligence support for recurring reporting.",bi,hard

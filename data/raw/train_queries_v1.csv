@@ -1,0 +1,19 @@
+query_id,resume_text,target_role_family,difficulty
+1,"Computer science student with Python, pandas, scikit-learn, machine learning, regression, classification, and model evaluation experience.",data_science,easy
+2,"Built forecasting models in Python, used statistics and feature engineering, and evaluated predictive performance on tabular data.",data_science,easy
+3,"Worked on NLP tasks, embeddings, text preprocessing, and exploratory analysis with pandas and Python.",data_science,medium
+4,"Used machine learning, experiment analysis, and statistical modeling to support predictive analytics projects.",data_science,medium
+5,"Built churn and forecasting models, but also created dashboards and explained model outputs to business teams.",data_science,hard
+6,"Worked with feature engineering, gradient boosting, SQL, and executive presentations for model-driven decisions.",data_science,hard
+7,"Analyzed product metrics, retention, funnel performance, and A/B test results using SQL and Python.",analytics,easy
+8,"Worked on campaign performance analysis, segmentation, and marketing reporting with Tableau and SQL.",analytics,easy
+9,"Built dashboards for growth teams, tracked KPIs, and performed ad hoc analysis for product decisions.",analytics,medium
+10,"Used SQL, Python, and experimentation results to analyze user behavior, retention, and conversion funnels.",analytics,medium
+11,"Owned weekly KPI dashboards, segmentation analysis, and stakeholder reporting for growth and retention teams.",analytics,hard
+12,"Worked with dashboards, A/B tests, user behavior analysis, and business recommendations for product managers.",analytics,hard
+13,"Built Power BI dashboards, maintained recurring reports, monitored KPIs, and supported business intelligence workflows.",bi,easy
+14,"Prepared recurring executive reports, validated source data, and maintained business dashboards in Power BI.",bi,easy
+15,"Worked on reporting pipelines, dashboard maintenance, KPI tracking, and operational business reporting.",bi,medium
+16,"Maintained reporting workflows, created dashboards for finance teams, and supported recurring KPI reviews.",bi,medium
+17,"Supported business intelligence reporting, dashboard refresh cycles, KPI definitions, and recurring stakeholder reports.",bi,hard
+18,"Worked with Power BI, SQL dashboards, recurring business reports, and executive KPI monitoring for operations teams.",bi,hard
