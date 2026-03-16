@@ -1,0 +1,31 @@
+query_id,resume_text,target_role_family,difficulty
+1,"Computer science student with experience in Python, pandas, machine learning, forecasting, and statistical analysis. Built academic projects and evaluated model performance on structured data.",data_science,easy
+2,"Experience with feature engineering, model evaluation, experiments, and model reporting. Built lightweight visualizations for communicating findings to business teams.",data_science,medium
+3,"Worked on forecasting, nlp, and predictive projects in Python, while also building dashboards and sharing recommendations with non-technical stakeholders.",data_science,hard
+4,"Used Python, SQL, classification, and feature engineering for model-driven analysis, but also owned reporting summaries and presented performance trends to business teams.",data_science,hard
+5,"Applied Python, pandas, regression, and feature engineering in project work. Also created dashboards and presented insights to stakeholders, but most work focused on predictive analysis.",data_science,medium
+6,"Worked on data science projects involving model evaluation, predictive modeling, Python, and SQL. Experience with experiments, feature preparation, and communicating model results.",data_science,easy
+7,"Computer science student with experience in Python, pandas, statistics, machine learning, and statistical analysis. Built academic projects and evaluated model performance on structured data.",data_science,easy
+8,"Experience with predictive modeling, classification, experiments, and model reporting. Built lightweight visualizations for communicating findings to business teams.",data_science,medium
+9,"Worked on nlp, statistics, and predictive projects in Python, while also building dashboards and sharing recommendations with non-technical stakeholders.",data_science,hard
+10,"Used Python, SQL, pandas, and statistics for model-driven analysis, but also owned reporting summaries and presented performance trends to business teams.",data_science,hard
+11,"Worked on SQL analysis of a/b testing, segmentation, and business performance. Built dashboards and translated results into recommendations for stakeholders.",analytics,easy
+12,"Built dashboards and tracked KPIs, while focusing mainly on retention, user behavior, and ad hoc analysis for business teams.",analytics,medium
+13,"Worked with segmentation, dashboards, dashboards, KPI tracking, and recurring reporting, but the main focus was analysis for product and business decisions.",analytics,hard
+14,"Used SQL, dashboards, and stakeholder reporting together with funnel analysis and retention to support growth and experimentation work.",analytics,hard
+15,"Used SQL, Python, product metrics, and retention to support product analysis. Also maintained dashboards, but most work involved interpreting behavior and running analysis.",analytics,medium
+16,"Experience with user behavior, ad hoc analysis, SQL, and dashboarding for product and growth teams. Focused on analysis, experimentation, and business insights.",analytics,easy
+17,"Worked on SQL analysis of campaign performance, a/b testing, and business performance. Built dashboards and translated results into recommendations for stakeholders.",analytics,easy
+18,"Built dashboards and tracked KPIs, while focusing mainly on ad hoc analysis, funnel analysis, and ad hoc analysis for business teams.",analytics,medium
+19,"Worked with dashboards, campaign performance, dashboards, KPI tracking, and recurring reporting, but the main focus was analysis for product and business decisions.",analytics,hard
+20,"Used SQL, dashboards, and stakeholder reporting together with stakeholder recommendations and campaign performance to support growth and experimentation work.",analytics,hard
+21,"Built Power BI dashboards, worked on power bi, recurring reports, and recurring business reporting. Focused on KPI delivery and reporting workflows.",bi,easy
+22,"Maintained reporting pipelines and executive dashboards using SQL, Power BI, reporting, and executive dashboards.",bi,medium
+23,"Built dashboards, tracked business trends, supported stakeholders, and worked on recurring reports and data quality, while owning recurring reporting delivery.",bi,hard
+24,"Worked with SQL, Power BI, kpi tracking, and reporting; combined business reporting responsibilities with some analytical interpretation of KPI movements.",bi,hard
+25,"Worked on dashboards, KPI reporting, dashboard maintenance, and reporting. Also helped interpret metrics, but most work centered on reporting operations.",bi,medium
+26,"Experience with SQL, Power BI, executive dashboards, and reporting workflows. Maintained business dashboards and supported recurring stakeholder reports.",bi,easy
+27,"Built Power BI dashboards, worked on business intelligence, power bi, and recurring business reporting. Focused on KPI delivery and reporting workflows.",bi,easy
+28,"Maintained reporting pipelines and executive dashboards using SQL, Power BI, reporting workflows, and kpi tracking.",bi,medium
+29,"Built dashboards, tracked business trends, supported stakeholders, and worked on data quality and business intelligence, while owning recurring reporting delivery.",bi,hard
+30,"Worked with SQL, Power BI, sql dashboards, and business intelligence; combined business reporting responsibilities with some analytical interpretation of KPI movements.",bi,hard
