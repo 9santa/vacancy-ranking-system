@@ -1,0 +1,31 @@
+query_id,resume_text,target_role_family,difficulty
+1,"Worked on predictive modeling, classification, and model evaluation in Python. Built experiments on structured datasets and communicated findings to stakeholders.",data_science,easy
+2,"Experience with forecasting, feature engineering, and statistical modeling. Main focus was building models and analyzing performance.",data_science,easy
+3,"Worked on predictive modeling, SQL analysis, and stakeholder presentations. Also created dashboards, but most effort went into model evaluation and forecasting.",data_science,medium
+4,"Experience with feature engineering, model reporting, and business communication. Some dashboard work existed, though the role stayed focused on predictive analysis.",data_science,medium
+5,"Worked on forecasting, dashboards, and stakeholder recommendations, but the main focus was predictive modeling and model evaluation for business decisions.",data_science,hard
+6,"Built model-driven analysis with feature engineering and experimentation results, while also preparing reporting summaries for product teams.",data_science,hard
+7,"Worked on A/B testing, retention analysis, and segmentation using SQL dashboards. Main focus was product and business decision support.",analytics,easy
+8,"Experience with funnel analysis, user behavior analysis, and business insights. Built answers for stakeholder questions with data.",analytics,easy
+9,"Worked on segmentation, KPI dashboards, and stakeholder reporting, but the main focus was user behavior analysis and decision support.",analytics,medium
+10,"Experience with A/B testing, reporting summaries, and metrics definitions. Most of the role centered on analysis rather than recurring reporting operations.",analytics,medium
+11,"Handled dashboards, KPI tracking, and recurring stakeholder reviews, but the main responsibility was segmentation and ad hoc analysis for product decisions.",analytics,hard
+12,Worked with reporting summaries and metrics reviews together with retention analysis and funnel analysis; the role centered on insight generation rather than dashboard operations.,analytics,hard
+13,"Built Power BI dashboards, handled recurring reporting, and supported KPI tracking. Main responsibility was dashboard delivery and reporting workflows.",bi,easy
+14,"Experience with executive dashboards, reporting workflows, and scheduled reports using SQL and Excel. Focused on KPI delivery.",bi,easy
+15,"Worked on executive dashboards, SQL, and metric delivery. Also helped explain trends, but the main role centered on recurring reports and dashboard operations.",bi,medium
+16,"Supported reporting workflows, source data validation, and dashboard refreshes for business teams. Main responsibility was reporting reliability.",bi,medium
+17,"Built dashboards, tracked business trends, and supported stakeholder reviews, while owning recurring reporting and dashboard maintenance.",bi,hard
+18,"Worked on KPI tracking, monthly reporting, and reporting governance; although some analysis language was involved, the role was primarily BI reporting.",bi,hard
+19,"Built ETL pipelines, Airflow orchestration, and dbt transformations. Main focus was reliable data delivery for analytics teams.",data_engineering,easy
+20,"Experience with Spark jobs, data warehouse modeling, and batch pipelines using SQL and Python. Focused on data platform work.",data_engineering,easy
+21,"Built Airflow orchestration, warehouse tables, and data reliability checks. Also collaborated with analytics teams, but the main role was pipeline engineering.",data_engineering,medium
+22,"Used SQL, Python, and Spark jobs together with dbt transformations and data delivery for analytics consumption.",data_engineering,medium
+23,"Worked on feature pipelines, ETL pipelines, and reporting delivery, but the primary responsibility was Airflow orchestration and data platform reliability.",data_engineering,hard
+24,"Built data products with Spark jobs, warehouse tables, and pipeline monitoring, while also supporting analytics and ML consumers.",data_engineering,hard
+25,"Worked on model deployment, model serving, and Dockerized model services. Main focus was productionizing machine learning systems.",ml_engineering,easy
+26,"Experience with inference services, model monitoring, and Kubernetes for ML. Focused on operational ML infrastructure.",ml_engineering,easy
+27,"Worked on model serving, batch inference, and experiment tracking. Also collaborated with data scientists, but most effort went into production ML systems.",ml_engineering,medium
+28,"Used Python, Docker, and Kubernetes for ML together with model monitoring and online inference. Main focus was deploying and maintaining models.",ml_engineering,medium
+29,"Handled training pipelines, deployment work, and feature pipeline coordination, but the main role was model serving and production monitoring.",ml_engineering,hard
+30,"Worked on model lifecycle systems with online inference, CI/CD for ML, and Kubernetes; some experimentation support existed, though the job centered on production ML.",ml_engineering,hard
