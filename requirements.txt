@@ -3,3 +3,4 @@ scikit-learn - TF-IFD, cosine similarity
 nltk - stopwords
 sentence-tranformers
 torch
+datasets
