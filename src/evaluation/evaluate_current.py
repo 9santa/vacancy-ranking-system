@@ -4,9 +4,9 @@ from src.data.load_data import load_jobs
 from src.models.two_stage_learned_matcher import TwoStageLearnedMatcher
 
 
-JOBS_PATH = "data/raw/jobs_v2.csv"
-TEST_QUERIES_PATH = "data/raw/test_queries_v3.csv"
-MODEL_ARTIFACT_PATH = "artifacts/learned_reranker_no_domain.joblib"
+JOBS_PATH = "data/raw/jobs_v3_real_clean.csv"
+TEST_QUERIES_PATH = "data/raw/test_queries_v4.csv"
+MODEL_ARTIFACT_PATH = "artifacts/learned_reranker_v3_5roles.joblib"
 
 
 def load_queries(csv_path: str) -> pd.DataFrame:
@@ -23,7 +23,9 @@ def load_queries(csv_path: str) -> pd.DataFrame:
     return df
 
 
-def hit_at_k(recommended_role_families: list[str], target_role_family: str, k: int) -> int:
+def hit_at_k(
+    recommended_role_families: list[str], target_role_family: str, k: int
+) -> int:
     return int(target_role_family in recommended_role_families[:k])
 
 
@@ -51,7 +53,9 @@ def evaluate_matcher(
         }
 
         for k in top_k_values:
-            result_row[f"hit@{k}"] = hit_at_k(predicted_roles, row["target_role_family"], k)
+            result_row[f"hit@{k}"] = hit_at_k(
+                predicted_roles, row["target_role_family"], k
+            )
 
         rows.append(result_row)
 
@@ -83,7 +87,7 @@ def main():
     results_df, metrics = evaluate_matcher(
         matcher,
         test_df,
-        retrieve_top_k=30,
+        retrieve_top_k=40,
         top_k_values=[1, 3, 5],
     )
 

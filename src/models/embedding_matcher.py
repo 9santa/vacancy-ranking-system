@@ -5,6 +5,7 @@ from torch import norm
 
 from src.preprocessing.text_cleaning import clean_text
 
+
 class EmbeddingJobMatcher:
     """
     Semantic retrieval baseline.
@@ -14,11 +15,7 @@ class EmbeddingJobMatcher:
     - compare via cosine similarity
     """
 
-    def __init__(
-        self,
-        model_name: str = "all-MiniLM-L6-v2",
-        batch_size: int = 32
-    ):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2", batch_size: int = 32):
         self.model_name = model_name
         self.batch_size = batch_size
         self.model = SentenceTransformer(model_name)
@@ -35,11 +32,7 @@ class EmbeddingJobMatcher:
         for col in ["title", "skills", "description"]:
             df[col] = df[col].fillna("").astype(str)
 
-        job_text = (
-            df["title"] + ". "
-            + df["skills"] + ". "
-            + df["description"]
-        )
+        job_text = df["title"] + ". " + df["skills"] + ". " + df["description"]
 
         return job_text.apply(clean_text)
 
@@ -72,9 +65,13 @@ class EmbeddingJobMatcher:
         Encode all vacancies one time.
         """
         required_columns = ["title", "skills", "description"]
-        missing_columns = [col for col in required_columns if col not in jobs_df.columns]
+        missing_columns = [
+            col for col in required_columns if col not in jobs_df.columns
+        ]
         if missing_columns:
-            raise ValueError(f"Missing required columns for embedding matcher: {missing_columns}")
+            raise ValueError(
+                f"Missing required columns for embedding matcher: {missing_columns}"
+            )
 
         self.jobs_df = jobs_df.copy()
         job_texts = self._build_job_text(self.jobs_df).tolist()
@@ -83,8 +80,8 @@ class EmbeddingJobMatcher:
             job_texts,
             batch_size=self.batch_size,
             convert_to_numpy=True,
-            normalize_embeddings=True, # normalize so that cosine similarity actually works
-            show_progress_bar=False
+            normalize_embeddings=True,  # normalize so that cosine similarity actually works
+            show_progress_bar=False,
         )
 
     def recommend(self, resume_text: str, top_k: int = 10) -> pd.DataFrame:
@@ -99,11 +96,13 @@ class EmbeddingJobMatcher:
         resume_embedding = self.model.encode(
             [cleaned_resume],
             convert_to_numpy=True,
-            normalize_embeddings=True, # same as before
-            show_progress_bar=False
+            normalize_embeddings=True,  # same as before
+            show_progress_bar=False,
         )
 
-        similarities = cosine_similarity(resume_embedding, self.job_embeddings).flatten()
+        similarities = cosine_similarity(
+            resume_embedding, self.job_embeddings
+        ).flatten()
 
         results = self.jobs_df.copy()
         results["score"] = similarities
@@ -129,5 +128,8 @@ class EmbeddingJobMatcher:
 
         if "role_family" in results.columns:
             return_columns.append("role_family")
+
+        if "role_subfamily" in results.columns:
+            return_columns.append("role_subfamily")
 
         return results[return_columns]

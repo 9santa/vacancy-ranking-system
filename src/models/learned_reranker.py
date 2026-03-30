@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from src.models.cross_encoder_reranker import CrossEncoderReranker
 from src.models.feature_reranker import FeatureBasedReranker
 
+
 class LearnedReranker:
     """
     Pointwise learned reranker.
@@ -31,26 +32,26 @@ class LearnedReranker:
         self,
         cross_encoder_model_name: str = "cross-encoder/ms-macro-MiniLM-L6-v2",
         cross_encoder_batch_size: int = 16,
-        cross_encoder_max_length: int = 512
+        cross_encoder_max_length: int = 512,
     ):
         self.cross_encoder_reranker = CrossEncoderReranker(
             model_name=cross_encoder_model_name,
             batch_size=cross_encoder_batch_size,
-            max_length=cross_encoder_max_length
+            max_length=cross_encoder_max_length,
         )
 
         self.feature_reranker = FeatureBasedReranker(
             retrieval_weight=0.55,
             skill_weight=0.20,
             domain_weight=0.15,
-            title_weight=0.10
+            title_weight=0.10,
         )
 
         self.model = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),
                 (
-                    "clf", # classifier
+                    "clf",  # classifier
                     LogisticRegression(
                         max_iter=1000,
                         class_weight="balanced",
@@ -71,12 +72,16 @@ class LearnedReranker:
 
         return (scores - min_score) / (max_score - min_score)
 
-    def build_feature_frame(self, resume_text: str, candidates_df: pd.DataFrame) -> pd.DataFrame:
+    def build_feature_frame(
+        self, resume_text: str, candidates_df: pd.DataFrame
+    ) -> pd.DataFrame:
         """
         Builds pairwise features for (resume, job) pairs.
         """
         required_columns = ["title", "skills", "description", "score"]
-        missing_columns = [col for col in required_columns if col not in candidates_df.columns]
+        missing_columns = [
+            col for col in required_columns if col not in candidates_df.columns
+        ]
         if missing_columns:
             raise ValueError(f"Missing required candidate columns: {missing_columns}")
 
@@ -107,15 +112,25 @@ class LearnedReranker:
         results = results.merge(feature_results, on="job_id", how="left")
         results = results.merge(ce_results, on="job_id", how="left")
 
-        results["retrieval_score_norm"] = self._normalize_scores(results["retrieval_score"])
-        results["cross_encoder_score_norm"] = self._normalize_scores(results["cross_encoder_score"])
+        results["retrieval_score_norm"] = self._normalize_scores(
+            results["retrieval_score"]
+        )
+        results["cross_encoder_score_norm"] = self._normalize_scores(
+            results["cross_encoder_score"]
+        )
 
         return results
 
     def fit_on_pairs(self, pair_df: pd.DataFrame) -> None:
-        missing_columns = [col for col in self.FEATURE_COLUMNS + ["label"] if col not in pair_df.columns]
+        missing_columns = [
+            col
+            for col in self.FEATURE_COLUMNS + ["label"]
+            if col not in pair_df.columns
+        ]
         if missing_columns:
-            raise ValueError(f"Missing required columns for training: {missing_columns}")
+            raise ValueError(
+                f"Missing required columns for training: {missing_columns}"
+            )
 
         X = pair_df[self.FEATURE_COLUMNS]
         y = pair_df["label"]
@@ -158,6 +173,9 @@ class LearnedReranker:
         if "role_family" in feature_df.columns:
             return_columns.append("role_family")
 
+        if "role_subfamily" in feature_df.columns:
+            return_columns.append("role_subfamily")
+
         return feature_df[return_columns]
 
     def save(self, path: str | Path) -> None:
@@ -168,15 +186,3 @@ class LearnedReranker:
     def load(self, path: str | Path) -> None:
         self.model = joblib.load(path)
         self.is_fitted = True
-
-
-
-
-
-
-
-
-
-
-
-

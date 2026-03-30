@@ -4,6 +4,12 @@ import pandas as pd
 from src.data.load_data import load_jobs
 from src.models.two_stage_learned_matcher import TwoStageLearnedMatcher
 
+JOBS_PATH = "data/raw/jobs_v3_real_clean.csv"
+TRAIN_QUERIES_PATH = "data/raw/train_queries_v3.csv"
+VAL_QUERIES_PATH = "data/raw/val_queries_v3.csv"
+MODEL_ARTIFACT_PATH = "artifacts/learned_reranker_v3_5roles.joblib"
+
+
 def load_queries(csv_path: str) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
 
@@ -61,13 +67,15 @@ def build_pair_dataset(
         if selected_candidates.empty:
             continue
 
-        feature_df = matcher.reranker.build_feature_frame(resume_text, selected_candidates)
+        feature_df = matcher.reranker.build_feature_frame(
+            resume_text, selected_candidates
+        )
 
         feature_df["query_id"] = query_id
         feature_df["target_role_family"] = target_role_family
-        feature_df["label"] = (
-            feature_df["role_family"] == target_role_family
-        ).astype(int)
+        feature_df["label"] = (feature_df["role_family"] == target_role_family).astype(
+            int
+        )
 
         rows.append(feature_df)
 
@@ -75,7 +83,9 @@ def build_pair_dataset(
     return pd.concat(rows, ignore_index=True)
 
 
-def hit_at_k(recommended_role_families: list[str], target_role_family: str, k: int) -> int:
+def hit_at_k(
+    recommended_role_families: list[str], target_role_family: str, k: int
+) -> int:
     return int(target_role_family in recommended_role_families[:k])
 
 
@@ -103,7 +113,9 @@ def evaluate_matcher(
         }
 
         for k in top_k_values:
-            result_row[f"hit@{k}"] = hit_at_k(predicted_roles, row["target_role_family"], k)
+            result_row[f"hit@{k}"] = hit_at_k(
+                predicted_roles, row["target_role_family"], k
+            )
 
         rows.append(result_row)
 
@@ -113,9 +125,9 @@ def evaluate_matcher(
 
 
 def main():
-    jobs_df = load_jobs("data/raw/jobs_v2.csv")
-    train_df = load_queries("data/raw/train_queries_v2.csv")
-    val_df = load_queries("data/raw/val_queries_v2.csv")
+    jobs_df = load_jobs(JOBS_PATH)
+    train_df = load_queries(TRAIN_QUERIES_PATH)
+    val_df = load_queries(VAL_QUERIES_PATH)
 
     matcher = TwoStageLearnedMatcher(
         embedding_model_name="all-MiniLM-L6-v2",
@@ -126,7 +138,13 @@ def main():
     )
     matcher.fit_jobs(jobs_df)
 
-    train_pair_df = build_pair_dataset(matcher, train_df, retrieve_top_k=30, max_positives_per_query=2, max_negatives_per_query=6)
+    train_pair_df = build_pair_dataset(
+        matcher,
+        train_df,
+        retrieve_top_k=40,
+        max_positives_per_query=3,
+        max_negatives_per_query=8,
+    )
 
     print("\nTraining pair dataset info:")
     print(f"Rows: {len(train_pair_df)}")
@@ -137,7 +155,9 @@ def main():
 
     matcher.fit_reranker(train_pair_df)
 
-    results_df, metrics = evaluate_matcher(matcher, val_df, retrieve_top_k=10, top_k_values=[1, 3, 5])
+    results_df, metrics = evaluate_matcher(
+        matcher, val_df, retrieve_top_k=10, top_k_values=[1, 3, 5]
+    )
 
     print("\nValidation results:\n")
     print(results_df.to_string(index=False))
@@ -146,7 +166,7 @@ def main():
     for metric_name, value in metrics.items():
         print(f"{metric_name}: {value:.3f}")
 
-    artifact_path = Path("artifacts/learned_reranker_no_domain.joblib")
+    artifact_path = Path(MODEL_ARTIFACT_PATH)
     matcher.reranker.save(artifact_path)
     print(f"\nSaved trained reranker to: {artifact_path}")
 
